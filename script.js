@@ -8,6 +8,10 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
+const tabContainer = document.querySelector('.operations__tab-container');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContent = document.querySelectorAll('.operations__content');
+const allSections = document.querySelectorAll('.section');
 
 ///////////////////////////////////////
 // Modal window
@@ -86,10 +90,6 @@ const headerObserver = new IntersectionObserver(navSticky, {
 headerObserver.observe(header);
 
 // Tabbed Component
-const tabContainer = document.querySelector('.operations__tab-container');
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
 
@@ -107,3 +107,26 @@ tabContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Reveal Section
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove('section--hidden');
+
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(s => {
+  s.classList.add('section--hidden');
+  sectionObserver.observe(s);
+});
+
+// Lazy Image
