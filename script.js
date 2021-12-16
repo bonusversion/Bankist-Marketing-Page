@@ -71,7 +71,7 @@ const navHeight = nav.getBoundingClientRect().height; // 在响应式布局中�
 
 const navSticky = function (entries) {
   const [entry] = entries;
-  console.log(entry);
+
   if (!entry.isIntersecting) {
     nav.classList.add('sticky');
   } else nav.classList.remove('sticky');
@@ -84,3 +84,26 @@ const headerObserver = new IntersectionObserver(navSticky, {
 });
 
 headerObserver.observe(header);
+
+// Tabbed Component
+const tabContainer = document.querySelector('.operations__tab-container');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+
+  if (!clicked) return; // Guard Clause
+
+  // Remove activate classes
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  // Activate tab
+  clicked.classList.add('operations__tab--active');
+
+  // Activate content area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
